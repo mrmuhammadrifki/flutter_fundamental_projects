@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:dicoding_news_app/data/api/api_service.dart';
+import 'package:dicoding_news_app/provider/news_provider.dart';
 import 'package:dicoding_news_app/ui/article_list_page.dart';
 import 'package:dicoding_news_app/ui/settings_page.dart';
 import 'package:dicoding_news_app/common/styles.dart';
 import 'package:dicoding_news_app/widgets/platform_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home_page';
@@ -39,7 +42,10 @@ class _HomePageState extends State<HomePage> {
   ];
 
   final List<Widget> _listWidget = [
-    const ArticleListPage(),
+    ChangeNotifierProvider(
+      create: (_) => NewsProvider(apiService: ApiService()),
+      child: const ArticleListPage(),
+    ),
     const SettingsPage(),
   ];
 
