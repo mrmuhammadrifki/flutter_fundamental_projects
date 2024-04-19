@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:restaurant_app/common/styles.dart';
-import 'package:restaurant_app/data/model/restaurant_response_model.dart';
+import 'package:restaurant_app/data/api/api_service.dart';
+import 'package:restaurant_app/provider/restaurant_provider.dart';
+import 'package:restaurant_app/provider/detail_provider.dart';
 import 'package:restaurant_app/ui/home_page.dart';
 import 'package:restaurant_app/ui/restaurant_detail_page.dart';
 
@@ -26,10 +29,15 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: HomePage.routeName,
       routes: {
-        HomePage.routeName: (context) => const HomePage(),
-        RestaurantDetailPage.routeName: (context) => RestaurantDetailPage(
-              restaurant:
-                  ModalRoute.of(context)?.settings.arguments as Restaurant,
+        HomePage.routeName: (context) => ChangeNotifierProvider(
+            create: (_) => RestaurantProvider(apiService: ApiService()),
+            child: const HomePage()),
+        RestaurantDetailPage.routeName: (context) =>
+            ChangeNotifierProvider<DetailProvider>(
+              create: (_) => DetailProvider(apiService: ApiService()),
+              child: RestaurantDetailPage(
+                id: ModalRoute.of(context)?.settings.arguments as String,
+              ),
             )
       },
     );

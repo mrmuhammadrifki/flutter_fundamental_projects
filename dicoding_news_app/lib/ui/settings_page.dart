@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:dicoding_news_app/provider/scheduling_provider.dart';
+import 'package:dicoding_news_app/widgets/custom_dialog.dart';
 import 'package:dicoding_news_app/widgets/platform_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -82,6 +87,25 @@ class SettingsPage extends StatelessWidget {
                           );
                         },
                       );
+              },
+            ),
+          ),
+        ),
+        Material(
+          child: ListTile(
+            title: const Text('Scheduling News'),
+            trailing: Consumer<SchedulingProvider>(
+              builder: (context, scheduled, _) {
+                return Switch.adaptive(
+                  value: scheduled.isScheduled,
+                  onChanged: (value) async {
+                    if (Platform.isIOS) {
+                      customDialog(context);
+                    } else {
+                      scheduled.scheduledNews(value);
+                    }
+                  },
+                );
               },
             ),
           ),
